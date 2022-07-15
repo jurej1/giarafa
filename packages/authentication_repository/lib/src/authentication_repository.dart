@@ -1,3 +1,4 @@
+import 'package:authentication_repository/authentication_repository.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 enum AuthenticationStatus { authenticated, unauthenticated, unknown }
@@ -11,8 +12,8 @@ class AuthenticationRepository {
 
   final FirebaseAuth _firebaseAuth;
 
-  Stream<User?> getUser() {
-    return _firebaseAuth.authStateChanges();
+  Stream<AuthUser?> getUser() {
+    return _firebaseAuth.authStateChanges().map((event) => AuthUser(id: event?.uid, email: event?.email, username: event?.displayName));
   }
 
   Future<void> signInWithEmailAndPassword(String email, String password) {
