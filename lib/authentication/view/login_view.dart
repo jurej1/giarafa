@@ -94,7 +94,7 @@ class _TopLayer extends StatelessWidget {
           animation: _controller,
           builder: (context, child) {
             return Transform.translate(
-              offset: Offset((_controller.value) * -170 + 170, 0),
+              offset: Offset((_controller.value) * -150 + 150, (_controller.value) * -80 + 80),
               child: Transform.scale(
                 scale: ((_controller.value / 1) * (1.0 - 0.8) + 0.8),
                 child: const Scaffold(
