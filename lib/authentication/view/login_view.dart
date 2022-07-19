@@ -1,7 +1,40 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-class LoginView extends StatelessWidget {
+import '../authentication.dart';
+
+class LoginView extends StatefulWidget {
   const LoginView({Key? key}) : super(key: key);
+
+  @override
+  State<LoginView> createState() => _LoginViewState();
+
+  static route(BuildContext context) {
+    return BlocProvider(
+      create: ((_) => DrawerCubit()),
+      child: const LoginView(),
+    );
+  }
+}
+
+class _LoginViewState extends State<LoginView> with SingleTickerProviderStateMixin {
+  late final AnimationController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 2),
+      value: 1.0,
+    );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -14,11 +47,22 @@ class LoginView extends StatelessWidget {
           width: size.width,
           color: Colors.orange,
         ),
-        Transform.scale(
-          scale: 0.8,
-          child: Scaffold(
-            appBar: CustomAppBar(),
-          ),
+        BlocConsumer<DrawerCubit, DrawerState>(
+          listener: (context, state) {
+            if (state.isOpen) {
+              _controller.animateTo(0.8);
+            } else {
+              _controller.animateTo(1.0);
+            }
+          },
+          builder: (context, state) {
+            return Transform.scale(
+              scale: _controller.value,
+              child: const Scaffold(
+                appBar: CustomAppBar(),
+              ),
+            );
+          },
         ),
       ],
     );
@@ -38,8 +82,8 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
         width: size.width,
         alignment: Alignment.centerLeft,
         child: IconButton(
-          icon: Icon(Icons.menu),
-          onPressed: () {},
+          icon: const Icon(Icons.menu),
+          onPressed: BlocProvider.of<DrawerCubit>(context).drawerTapped,
         ),
       ),
     );

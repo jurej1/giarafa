@@ -18,6 +18,6 @@ class DrawerCubit extends Cubit<DrawerState> {
   DrawerCubit() : super(DrawerState.closed);
 
   drawerTapped() {
-    return state.getOppositeValue();
+    emit(state.getOppositeValue());
   }
 }

@@ -11,7 +11,7 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       navigatorKey: _navigatorKey,
-      home: const LoginView(),
+      home: LoginView.route(context),
     );
   }
 }
