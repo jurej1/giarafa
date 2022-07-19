@@ -25,7 +25,7 @@ class _LoginViewState extends State<LoginView> with SingleTickerProviderStateMix
     super.initState();
     _controller = AnimationController(
       vsync: this,
-      duration: const Duration(seconds: 2),
+      duration: const Duration(milliseconds: 400),
       value: 1.0,
     );
   }
@@ -50,17 +50,30 @@ class _LoginViewState extends State<LoginView> with SingleTickerProviderStateMix
         BlocConsumer<DrawerCubit, DrawerState>(
           listener: (context, state) {
             if (state.isOpen) {
-              _controller.animateTo(0.8);
+              _controller.animateTo(0);
             } else {
-              _controller.animateTo(1.0);
+              _controller.animateBack(1);
             }
           },
+
+          //A =1
+          //B= 0
+          // C = 0
+          // D = 100
           builder: (context, state) {
-            return Transform.scale(
-              scale: _controller.value,
-              child: const Scaffold(
-                appBar: CustomAppBar(),
-              ),
+            return AnimatedBuilder(
+              animation: _controller,
+              builder: (context, child) {
+                return Transform.translate(
+                  offset: Offset((_controller.value) * -180 + 180, 0),
+                  child: Transform.scale(
+                    scale: ((_controller.value / 1) * (1.0 - 0.8) + 0.8),
+                    child: const Scaffold(
+                      appBar: CustomAppBar(),
+                    ),
+                  ),
+                );
+              },
             );
           },
         ),
